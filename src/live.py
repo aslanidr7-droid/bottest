@@ -56,6 +56,8 @@ def decide(bars, state, equity, today, allow_new_sleeves=True, override=None):
         st["core_pending"] = dict(ticker=want, qty=qty)
     # ----- sleeves -----
     sl = st.setdefault("sleeves", {})
+    off_file = ROOT / "state" / "sleeves_off.json"
+    off = json.loads(off_file.read_text()) if off_file.exists() else {}
     for name in SLEEVES["sleeves"]:
         t, fam = name.split()
         p = SLEEVE_DEFAULTS[fam]
@@ -67,6 +69,8 @@ def decide(bars, state, equity, today, allow_new_sleeves=True, override=None):
                 orders.append(dict(ticker=t, side="sell", qty=s["qty"], sleeve=name))
         elif s.get("last_exit") == str(today.date()):
             continue  # no same-day re-entry (matches backtest)
+        elif name in off:
+            continue  # switched off by the kill line
         elif allow_new_sleeves and bool(sleeve_entry(fam, c, p).iloc[-1]):
             qty = math.floor(equity * SLEEVES["slot"] / px[t])
             if qty > 0:
