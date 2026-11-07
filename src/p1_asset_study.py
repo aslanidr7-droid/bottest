@@ -14,9 +14,9 @@ def events(mask, gap):
     return pd.DatetimeIndex(out)
 
 
-def study():
+def study(win=None, save=True):
     C = load("close")
-    tr0, tr1 = S["train"]
+    tr0, tr1 = win or S["train"]
     spy_r = C["SPY"].pct_change()
     rows = []
     for t in S["study"]:
@@ -54,6 +54,8 @@ def study():
                          ret_on_spy_down=on_down, corr_spy=corr, vol=vol,
                          keeps=keeps, snaps=snaps, holds=holds, wild=wild))
     df = pd.DataFrame(rows)
+    if not save:
+        return df.set_index("ticker"), None
     df.to_csv(ROOT / "results" / "asset_study.csv", index=False)
     corr = C[S["study"]].pct_change().loc[tr0:tr1].corr()
     corr.to_csv(ROOT / "results" / "correlation.csv")
