@@ -45,3 +45,11 @@ Run any step: `python3 -m src.<module>` from repo root. Tests: `python3 -m pytes
 - Neighbour sets are my definition; XLK/XLF breakout and GLD dip failed neighbours here. Not tuned to match the video.
 - Flagged weaknesses copied from the video on purpose: locked test used in the funnel (P5 "test" is a check), margin leverage.
 - P6: re-picking sometimes chooses up to 9 sleeves (180% borrowing). Live config uses the P5 pick (2 sleeves, max 40%).
+
+## Scheduled tasks (created 2026-11-07, fresh cloud session each fire, env alpha-trading)
+- evening  trig_01Ch3p3j85Qh4MZpRLHtarUc  Mon-Fri 19:17 NY
+- morning  trig_01JBmbWMErqsN2NW8vbhSS7v  Mon-Fri 09:41 NY
+- missed   trig_01MVWyrKjsh2bsCLq1HZ8DSm  Mon-Fri 23:33 NY
+- fed      trig_01EBHPBXYxbLycSzUQLRfkQi  Mon-Fri 17:03 NY
+- review   trig_017VM3KLi9KBuUSQNmKSRw41  Sat 09:02 NY
+Each run stops with a report if Alpaca keys are missing.
