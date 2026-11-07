@@ -136,6 +136,17 @@ def test_reconcile_mismatch_halts():
     assert "reconcile" in r["halt"]
 
 
+def test_missing_ticker_halts_cleanly():
+    bars = research_bars()
+    d = bars["close"].index[-1]
+    broken = {k: v.copy() for k, v in bars.items()}
+    for k in broken:
+        broken[k].loc[d, "XLC"] = float("nan")
+    b = SimBroker()
+    r = bot.evening(b, bars=broken, as_of=d)
+    assert "XLC" in r["halt"] and not b.sent
+
+
 def test_stale_data_halts():
     bars = research_bars()
     r = bot.evening(SimBroker(), bars=bars, as_of=bars["close"].index[-1] + pd.Timedelta(days=3))

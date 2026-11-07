@@ -2,7 +2,7 @@
 
 Branch: `alpha-system` in `aslanidr7-droid/bottest`. Old PPO bot project (Botprojesi/, metriler.py) deleted on this branch.
 Cloud environment: `alpha-trading` (Yahoo, Alpaca paper, Telegram, federalreserve.gov allowed).
-Run any step: `python3 -m src.<module>` from repo root. Tests: `python3 -m pytest -q` (11 pass).
+Run any step: `python3 -m src.<module>` from repo root. Tests: `python3 -m pytest -q` (12 pass).
 
 | Step | Status | Result (ours) | Video |
 |---|---|---|---|
@@ -26,7 +26,7 @@ Run any step: `python3 -m src.<module>` from repo root. Tests: `python3 -m pytes
 
 ## BLOCKERS (user action)
 1. ~~GitHub push~~ — fixed, branch alpha-system is on GitHub.
-2. Env vars on `alpha-trading`: ALPACA_API_KEY, ALPACA_SECRET_KEY, ALPACA_PAPER=true, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID.
+2. ~~Env vars~~ — set 2026-11-07. Paper check: account ACTIVE, equity $104,343.47, no positions; dry-run 2026-11-06 → buy 280 GLD (core=GLD). Telegram send not yet tested; getUpdates empty (message the bot once).
 
 ## NEXT (after blockers)
 1. `python3 -m src.bot status` → paper account visible. `python3 -m src.bot evening --dry-run` → expect ~1 core buy (QQQ or GLD).

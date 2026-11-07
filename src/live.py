@@ -18,13 +18,49 @@ def tickers():
     return sorted(t)
 
 
-def fetch(days=500):
-    """Fresh daily bars for the live bot (separate from frozen research data)."""
-    df = yf.download(tickers(), period=f"{days}d", auto_adjust=True, progress=False, group_by="ticker")
-    out = {f: pd.DataFrame({t: df[t][f.capitalize()] for t in tickers()}) for f in ["open", "high", "low", "close"]}
+class DataError(Exception):
+    pass
+
+
+def fetch(days=500, tries=3):
+    """Fresh daily bars for the live bot (separate from frozen research data).
+    Downloads one ticker at a time (no threads -> no yfinance cache lock), retries, and raises
+    DataError if any ticker is still missing so the bot halts with a clear reason."""
+    import time
     LIVE.mkdir(parents=True, exist_ok=True)
+    try:
+        yf.set_tz_cache_location(str(LIVE / "yf_cache"))
+    except Exception:
+        pass
+    frames, missing = {}, []
+    for t in tickers():
+        d = None
+        for k in range(tries):
+            try:
+                d = yf.download(t, period=f"{days}d", auto_adjust=True, progress=False, threads=False,
+                                multi_level_index=False)
+            except Exception:
+                d = None
+            if d is not None and len(d.dropna()) >= 250:
+                break
+            time.sleep(2 * (k + 1))
+        if d is None or len(d.dropna()) < 250:
+            missing.append(t)
+        else:
+            frames[t] = d
+    if missing:
+        raise DataError(f"no data for {', '.join(missing)} after {tries} tries")
+    out = {f: pd.DataFrame({t: frames[t][f.capitalize()] for t in tickers()}) for f in ["open", "high", "low", "close"]}
     pd.concat(out, axis=1).to_parquet(LIVE / "bars.parquet")
     return {k: v.dropna(how="all") for k, v in out.items()}
+
+
+def check_bars(bars, today):
+    """Every ticker must have a bar for today; otherwise halt."""
+    last = bars["close"].loc[:pd.Timestamp(today)].iloc[-1]
+    bad = [t for t, v in last.items() if pd.isna(v)]
+    if bad:
+        raise DataError(f"missing today's bar for {', '.join(bad)}")
 
 
 def cut(bars, as_of):

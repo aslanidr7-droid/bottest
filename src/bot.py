@@ -114,11 +114,19 @@ def evening(broker, bars=None, as_of=None, dry_run=False, now=None):
         notes = sync(broker, st, tstr)
         reconcile(broker, st)
         # 4 data
-        bars = bars or live.fetch()
+        if bars is None:
+            try:
+                bars = live.fetch()
+            except live.DataError as e:
+                raise Halt(str(e))
         bars = live.cut(bars, today)
         last = bars["close"].index[-1]
         if last.normalize() != today.normalize():
             raise Halt(f"last bar is {last.date()}, not today {tstr} (holiday or stale data)")
+        try:
+            live.check_bars(bars, today)
+        except live.DataError as e:
+            raise Halt(str(e))
         # 5-7 regime, signals, AI call
         override = active_override(today, list(bars["close"].index))
         acct = broker.account()
@@ -163,6 +171,11 @@ def evening(broker, bars=None, as_of=None, dry_run=False, now=None):
         rec.update(halt=str(e))
         if not dry_run:
             log_run(rec); notify.send(f"ALPHA bot HALTED: {e}")
+        return rec
+    except Exception as e:  # any crash -> no orders, state untouched, clear alert
+        rec.update(halt=f"error {type(e).__name__}: {e}")
+        if not dry_run:
+            log_run(rec); notify.send(f"ALPHA bot ERROR (no orders sent): {type(e).__name__}: {e}")
         return rec
     finally:
         if LOCK.exists():
