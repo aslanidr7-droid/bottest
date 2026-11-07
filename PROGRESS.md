@@ -25,7 +25,7 @@ Run any step: `python3 -m src.<module>` from repo root. Tests: `python3 -m pytes
 | Dashboard | done | `python3 -m src.dashboard` → dashboard/index.html | — |
 
 ## BLOCKERS (user action)
-1. GitHub push refused (Claude GitHub App not linked to bottest). Needed for scheduled cloud runs.
+1. ~~GitHub push~~ — fixed, branch alpha-system is on GitHub.
 2. Env vars on `alpha-trading`: ALPACA_API_KEY, ALPACA_SECRET_KEY, ALPACA_PAPER=true, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID.
 
 ## NEXT (after blockers)
