@@ -1,0 +1,10 @@
+yfinance
+pandas
+numpy
+pyarrow
+pyyaml
+matplotlib
+pytest
+requests
+python-dotenv
+alpaca-py

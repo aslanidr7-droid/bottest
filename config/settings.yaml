@@ -1,0 +1,12 @@
+data_start: "2020-07-01"
+data_end: "2026-10-23"
+train: ["2022-01-03", "2024-12-31"]
+test: ["2025-01-02", "2026-10-23"]
+study: [SPY, QQQ, IWM, DIA, XLK, XLF, XLE, XLV, XLI, XLY, XLP, XLU, XLB, XLC, XLRE, TLT, IEF, SHY, BIL, GLD, SLV, USO, DBC, BTC-USD]
+engine: [SPY, QQQ, IWM, DIA]
+safe: [BIL, SHY, IEF, TLT, GLD]
+cash: BIL
+no_trade: [BTC-USD]
+cost: 0.0005
+capital: 100000
+margin_rate: 0.065
