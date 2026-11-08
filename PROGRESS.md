@@ -53,3 +53,8 @@ Run any step: `python3 -m src.<module>` from repo root. Tests: `python3 -m pytes
 - fed      trig_01EBHPBXYxbLycSzUQLRfkQi  Mon-Fri 17:03 NY
 - review   trig_017VM3KLi9KBuUSQNmKSRw41  Sat 09:02 NY
 Each run stops with a report if Alpaca keys are missing.
+
+## Decision 2026-11-08
+User: run the system exactly as in the video first; improvements later.
+Live config unchanged: core QQQ/GLD (SMA200) + sleeves XLC breakout, QQQ dip (20% slots, margin).
+Improvement research (P5b, P4b, robustness, 2007–21 OOS) is in results/improvement_report.md — NOT applied.
