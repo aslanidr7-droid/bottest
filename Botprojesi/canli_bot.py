@@ -8,14 +8,16 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack
 from veri_cek import borsa_verisi_cek, indikatorleri_ekle
 from ortam import BorsaOrtami
+from config import Config
 
-# Yapılandırma
-API_KEY = '48NzxZPzWucR5BVxYA8RdPp6Gq7ltba7NcgpiMgnnATA1KkmMnNYCxsp01diC0mw'
-SECRET_KEY = 'rhx3g3MJsfgXyAHN3EEPBi09ytW30O4e5y2fqy156BJI6oXjB04kFCz821M7kUSu'
-MODEL_YOLU = "./nihai_model_merkezi/best_model"
-SEMBOL = 'BTC/USDT'
-ZAMAN_DILIMI = '1h'
-BEKLEME_SURESI = 3600 # 1 Saat (Mum kapanışı)
+# Yapılandırma (API anahtarları .env dosyasından okunur, koda yazılmaz)
+Config.validate()
+API_KEY = Config.BINANCE_API_KEY
+SECRET_KEY = Config.BINANCE_SECRET_KEY
+MODEL_YOLU = os.path.join(Config.MODEL_DIR, Config.MODEL_NAME)
+SEMBOL = Config.SYMBOL
+ZAMAN_DILIMI = Config.TIMEFRAME
+BEKLEME_SURESI = Config.WAIT_TIME  # 1 Saat (Mum kapanışı)
 
 # Borsa Bağlantısı
 borsa = ccxt.binance({
@@ -24,7 +26,7 @@ borsa = ccxt.binance({
     'enableRateLimit': True,
     'options': {'defaultType': 'spot'}
 })
-borsa.set_sandbox_mode(True)
+borsa.set_sandbox_mode(Config.USE_SANDBOX)
 
 def modeli_yukle_ve_hazırla(df):
     env = DummyVecEnv([lambda: BorsaOrtami(df)])
