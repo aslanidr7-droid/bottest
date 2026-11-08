@@ -51,10 +51,15 @@ def greedy(core_ret, streams, win=TR):
 
 
 if __name__ == "__main__":
+    import sys
     core = pd.read_parquet(ROOT / "results" / "core_returns.parquet")["ret"]
-    passed = json.load(open(ROOT / "config" / "sleeves_passed.json"))
-    streams = sleeve_streams(passed)
-    chosen, log = greedy(core, streams)
+    if "--video" in sys.argv:  # use the video's final pick as-is (P5 result shown at 1:42:05)
+        chosen, log = ["QQQ breakout", "XLK dip", "GLD dip"], [("video pick", "fixed", float("nan"))]
+        streams = sleeve_streams(chosen)
+    else:
+        passed = json.load(open(ROOT / "config" / "sleeves_passed.json"))
+        streams = sleeve_streams(passed)
+        chosen, log = greedy(core, streams)
     for row in log:
         print(f"  {row[0]:<14} {row[1]:<9} {row[2]:.3f}")
     total, borrowed = combine(core, streams, chosen)

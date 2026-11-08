@@ -58,3 +58,10 @@ Each run stops with a report if Alpaca keys are missing.
 User: run the system exactly as in the video first; improvements later.
 Live config unchanged: core QQQ/GLD (SMA200) + sleeves XLC breakout, QQQ dip (20% slots, margin).
 Improvement research (P5b, P4b, robustness, 2007–21 OOS) is in results/improvement_report.md — NOT applied.
+
+## Decision 2026-11-08 (2)
+User: do exactly what the video does. Live sleeves switched to the video's final pick:
+QQQ breakout, XLK dip, GLD dip (`python3 -m src.p5_portfolio --video`).
+Result: account train 14.3%/−31.5%, test 29.1%/−12.9% (video 28.7/−13.1), full $236,532 (video $244,092), max borrow 60% (video 60.5%).
+Telegram: skipped for now (alerts only printed/logged).
+Dry-run 2026-11-06 (sim): buy 280 GLD (core), no sleeve entries.
